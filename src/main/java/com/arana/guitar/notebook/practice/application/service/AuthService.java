@@ -4,7 +4,10 @@ import com.arana.guitar.notebook.practice.domain.models.User;
 import com.arana.guitar.notebook.practice.domain.objects.PasswordHash;
 import com.arana.guitar.notebook.practice.domain.repo.UserRepository;
 import com.arana.guitar.notebook.practice.domain.util.PasswordService;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.stereotype.Service;
 
+@Service
 public class AuthService {
 
     private final UserRepository userRepository;
@@ -18,7 +21,7 @@ public class AuthService {
 
     public User authenticate(String username, String rawPassword) {
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Invalid credentials"));
+                .orElseThrow(() ->  new BadCredentialsException("Invalid credentials"));
 
         PasswordHash stored = new PasswordHash(
                 user.getPasswordHash(),
