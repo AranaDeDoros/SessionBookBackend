@@ -1,6 +1,7 @@
 package com.arana.guitar.notebook.practice.domain.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +41,7 @@ public class PracticeSession {
         this.songs.add(new SessionSong(this, song, position));
     }
 
-    public void replaceSongs(List<Song> newSongs) {
+    public void replaceSongs(@NotEmpty List<Song> newSongs) {
         this.songs.clear();
         for (int i = 0; i < newSongs.size(); i++) {
             addSong(newSongs.get(i), i);

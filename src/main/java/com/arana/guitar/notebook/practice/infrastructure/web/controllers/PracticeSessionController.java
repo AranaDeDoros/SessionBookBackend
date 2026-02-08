@@ -6,8 +6,9 @@ import com.arana.guitar.notebook.practice.domain.models.PracticeSession;
 import com.arana.guitar.notebook.practice.domain.models.User;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
+import com.arana.guitar.notebook.practice.domain.models.UserPrincipal;
 import java.util.List;
 
 @RestController
@@ -23,19 +24,6 @@ public class PracticeSessionController {
     @GetMapping
     public List<PracticeSession> findAll() {
         return service.findAll();
-    }
-
-    @PostMapping
-    public ResponseEntity<PracticeSession> create(
-            @Valid @RequestBody PracticeSessionRequest request
-    ) {
-        User owner = getCurrentUser(); // placeholder
-        PracticeSession created = service.create(
-                request.getSongIds(),
-                request.getName(),
-                owner
-        );
-        return ResponseEntity.ok(created);
     }
 
     @GetMapping("/{id}")
@@ -62,9 +50,23 @@ public class PracticeSessionController {
                 : ResponseEntity.notFound().build();
     }
 
-    private User getCurrentUser() {
-        // TODO: integrate Spring Security
-        return new User(null, "test", "test");
+    @PostMapping
+    public ResponseEntity<PracticeSession> create(
+            @Valid @RequestBody PracticeSessionRequest request,
+            @AuthenticationPrincipal UserPrincipal principal
+    ) {
+        User owner = principal.getUser();
+
+        PracticeSession created = service.create(
+                request.getSongIds(),
+                request.getName(),
+                owner
+        );
+
+        return ResponseEntity.ok(created);
     }
+
+
+
 }
 

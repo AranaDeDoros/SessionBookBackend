@@ -9,6 +9,8 @@ import java.util.List;
 public class PracticeSessionRequest {
     @NotBlank
     String name;
+    @NotBlank
+    String description;
     @NotEmpty
     List<Long> songIds;
 }
