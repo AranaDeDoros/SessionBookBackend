@@ -1,12 +1,14 @@
 package com.arana.guitar.notebook.practice.domain.util;
 import com.arana.guitar.notebook.practice.domain.objects.PasswordHash;
 import jakarta.validation.constraints.NotBlank;
+import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.util.Base64;
 
+@Service
 public class Sha256PasswordService implements PasswordService {
 
     private static final int SALT_LENGTH = 16;
